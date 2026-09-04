@@ -55,6 +55,14 @@ Map::~Map()
 {
     UnloadAll(true);
 
+    while (!m_transports.empty())
+    {
+        auto itr = m_transports.begin();
+        Transport* transport = *itr;
+        m_transports.erase(itr);
+        Remove<GameObject>(transport, true);
+    }
+
     if (m_persistentState)
         m_persistentState->SetUsedByMapState(nullptr);         // field pointer can be deleted after this
 
@@ -70,9 +78,6 @@ Map::~Map()
 
     delete m_weatherSystem;
     m_weatherSystem = nullptr;
-
-    for (auto m_Transport : m_transports)
-        delete m_Transport;
 }
 
 uint32 Map::GetCurrentMSTime() const
