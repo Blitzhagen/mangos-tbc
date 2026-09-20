@@ -167,6 +167,7 @@ class PathFinder
 #endif
 
         NavTerrainFlag getNavTerrain(float x, float y, float z) const;
+        bool isWaterPosition(float x, float y, float z) const;
         void createFilter();
         void updateFilter();
 
