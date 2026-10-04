@@ -451,14 +451,12 @@ void WorldSession::SendPetNameQuery(ObjectGuid petguid, uint32 petnumber) const
 
     char const* name = pet->GetName();
 
-    // creature pets have localization like other creatures, unless the pet has
-    // a custom name (renamed hunter pets, generated names for warlock demons)
-    if (CreatureInfo const* cInfo = pet->GetCreatureInfo())
-        if (strcmp(name, cInfo->Name) == 0)
-        {
-            int loc_idx = GetSessionDbLocaleIndex();
-            sObjectMgr.GetCreatureLocaleStrings(pet->GetEntry(), loc_idx, &name);
-        }
+    // creature pets have localization like other creatures
+    if (!pet->GetOwnerGuid().IsPlayer())
+    {
+        int loc_idx = GetSessionDbLocaleIndex();
+        sObjectMgr.GetCreatureLocaleStrings(pet->GetEntry(), loc_idx, &name);
+    }
 
     WorldPacket data(SMSG_PET_NAME_QUERY_RESPONSE, (4 + 4 + strlen(name) + 1));
     data << uint32(petnumber);
