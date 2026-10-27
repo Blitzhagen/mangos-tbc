@@ -245,7 +245,9 @@ void AuctionHouseBot::Update()
                 uint32 count = itemEntry.second - stackCounter > prototype->GetMaxStackSize() ? prototype->GetMaxStackSize() : itemEntry.second - stackCounter;
                 uint32 buyoutPrice = itemValue * count;
                 Item* item = Item::CreateItem(itemEntry.first, count);
-                if (buyoutPrice == 0 || !item)
+                if (!item)
+                    continue;
+                if (buyoutPrice == 0)
                 {
                     delete item;
                     continue; // don't put up items we don't know the value of
